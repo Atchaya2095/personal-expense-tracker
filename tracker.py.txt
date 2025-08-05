@@ -1,0 +1,43 @@
+from datetime import datetime
+
+def add_transaction(data):
+    t_type = input("Type (income/expense): ").strip().lower()
+    category = input("Category (food, rent, etc.): ")
+    amount = float(input("Amount: "))
+    note = input("Note (optional): ")
+    date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    transaction = {
+        "type": t_type,
+        "category": category,
+        "amount": amount,
+        "note": note,
+        "date": date
+    }
+
+    data.append(transaction)
+    print("Transaction added successfully!")
+
+def view_balance(data):
+    income = sum(t['amount'] for t in data if t['type'] == 'income')
+    expense = sum(t['amount'] for t in data if t['type'] == 'expense')
+    print(f"\nBalance: ₹{income - expense}")
+    print(f"Total Income: ₹{income}")
+    print(f"Total Expense: ₹{expense}")
+
+def view_transactions(data):
+    if not data:
+        print("No transactions to show.")
+        return
+    for t in data:
+        print(f"[{t['date']}] {t['type'].upper()} | ₹{t['amount']} | {t['category']} | {t['note']}")
+
+def search_transactions(data):
+    keyword = input("Search by category or date (YYYY-MM-DD): ").strip().lower()
+    results = [t for t in data if keyword in t['category'].lower() or keyword in t['date']]
+    if results:
+        for t in results:
+            print(f"[{t['date']}] {t['type'].upper()} | ₹{t['amount']} | {t['category']} | {t['note']}")
+    else:
+        print("No matching transactions found.")
+
